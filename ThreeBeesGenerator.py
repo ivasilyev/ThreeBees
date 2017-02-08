@@ -2,8 +2,8 @@
 # Make sure the script is placed into the root lanes directory containing "LXX" subdirectories.
 
 # [SoftwarePaths]
-selfPath = ""
-qualityFilterPath = ""
+selfPath = "~/scripts/ThreeBees/"  # Where the generator is located
+XSQToolsPath = "/data/projects/lifescope_xsq/XSQ_Tools/"
 saetPath = ""
 qualityTrimmerPath = ""
 bowtiePath = ""
@@ -85,9 +85,9 @@ for laneFile in lanePaths:
                         "\n"
                         )
                     )
-    multiplexParser = open(str(laneFile).replace(".xsq", "_Multiplex_.txt"), 'rU')
 
-    # Predicting demultiplexed reads folders
+    # Predicting demultiplexed reads directories
+    multiplexParser = open(str(laneFile).replace(".xsq", "_Multiplex_.txt"), 'rU')
     multiplexFilenames = []
 
     for row in multiplexParser:
@@ -97,11 +97,12 @@ for laneFile in lanePaths:
     # Main workflow
     for sampleName in multiplexFilenames:
         csfastaFileName = str(laneFile.rsplit('/', 1)[-1]).replace(".xsq", "") + "_" + sampleName + "_F3"
+        csfastaPath = str(workingFolder + "/ThreeBees/1_Preprocessed_reads/Libraries_" + str(laneFile.rsplit('/', 1)[-1]).replace(".xsq", "") + "/" + sampleName + "/F3/reads/" + csfastaFileName + ".csfasta")
 
         threeBees.write("# FOR SAMPLE FILE: " + csfastaFileName + "\n" +
                         "\n" +
                         "cd $ScriptDir/1_Preprocessed_reads/" + "\n" +
-                        qualityFilterPath + "reads-filter_new.pl -f " + csfastaPath + " -q " + str(csfastaPath).replace(".csfasta", ".QV.qual") + " -o filtered -t 15 &>$ScriptDir/5_Statistics/" + csfastaFileName + "_reads-filter_new.log" + "\n" +
+                        "perl " + selfPath + "reads-filter_new.pl -f " + csfastaPath + " -q " + str(csfastaPath).replace(".csfasta", ".QV.qual") + " -o filtered -t 15 &>$ScriptDir/5_Statistics/" + csfastaFileName + "_reads-filter_new.log" + "\n" +
                         "\n" +
                         "cd filtered" + "\n" +
                         saetPath + "saet " + csfastaFileName + ".15.filtered.csfasta 200000000 -qual " + csfastaFileName + ".QV.15.filtered.qual -qvupdate -trustprefix 25 -localrounds 3 -globalrounds 2 -numcores 20 -log $ScriptDir/5_Statistics/" + csfastaFileName + "_SAET.log" + "\n" +

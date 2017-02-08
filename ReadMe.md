@@ -10,7 +10,7 @@
 
  1. Pre-configured *ThreeBeesGenerator.py* makes *ThreeBees.sh* script in the folder specified after -f flag. This folder must contain *"LXX"* subdirectories, and **.xsq* file must have path like *"LXX/result/"*;
  2. *ThreeBees.sh* runs main data processing including the next step;
- 3. *ThreeBeesCombiner.py* collects all required coverage data into bp.txt or pos.txt files created in *"ThreeBees/5_Statistics/Finalized/"* path. *"bp.txt"* contains total coverage and *"pos.txt"* contains numbers of covered nucleotides per gene (entry). 
+ 3. *ThreeBeesCombiner.py* collects all required coverage data into *bp.txt* or *pos.txt* files created in *"ThreeBees/5_Statistics/Finalized/"* path. *"bp.txt"* contains total coverage and *"pos.txt"* contains numbers of covered nucleotides per gene (entry). 
 
 ### Data processing
 
@@ -26,10 +26,17 @@
  - Install all mentioned software. You have to also check *perl* and *python3* with *pandas* package;
  - Download and build sequence data (see below);
  - Paste all paths into SoftwarePaths and SequencesPaths sections of *ThreeBeesGenerator.py* file.
+ - Launch commands:
+```
+cd <full path to folder with "LXX" subdirectories>  # Navigation into main working  directory
+python ~/scripts/ThreeBees/ThreeBeesGenerator.py -f <full path to folder with "LXX" subdirectories>  # Bash script generation
+nohup bash ThreeBees.sh > /dev/null 2>&1 & echo $! > run.pid  # Launch bash script with free console and save master control process ID, killing it will stop pipeline
+top  # Watch the progress, press "q" to exit
+```
 
 #### Making References: How We Did It
 
- - Download human genome in colorspace fasta from Bowtie site:
+ - Download human *hg19* genome in colorspace fasta from Bowtie site:
 ```
 wget ftp://ftp.ccb.jhu.edu/pub/data/bowtie_indexes/hg19_c.ebwt.zip
 unzip hg19_c.ebwt.zip -d hg19
@@ -86,7 +93,7 @@ cat "760MetaHit_139HMP_368PKU_511Bac.fa_2x_1.genome" "760MetaHit_139HMP_368PKU_5
 
 ```
 
- - Add a header to reserve **.genome* indexes as annotation for the fail-safe processing (we did not used it):
+ - Add a header to reserve **.genome* indexes as annotation for the fail-safe processing (we did not use it):
 
 ```
 sed -i '1s/^/Gene_name\tGene_length\tGene_ID\n/' annotation.txt
