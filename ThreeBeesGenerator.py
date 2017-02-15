@@ -5,11 +5,9 @@
 selfPath = "~/scripts/ThreeBees/"  # Where the generator is located
 XSQToolsPath = "/data/projects/lifescope_xsq/XSQ_Tools/"
 saetPath = ""
-qualityTrimmerPath = ""
 bowtiePath = ""
 samtoolsPath = ""
 bedtoolsPath = ""
-coverageExporterPath = "~/scripts/"
 
 # [SequencesPaths]
 humanGenomePath = "/data/reference/homo_sapiens/ucsc/hg19/sequence/ColorSpaseIndex/genome"
@@ -23,7 +21,8 @@ bacterialGenomeFai2 = "/data/reference/IGC/fs/760MetaHit_139HMP_368PKU_511Bac.fa
 bacterialGenomeLengths1 = "/data/reference/IGC/fs/760MetaHit_139HMP_368PKU_511Bac.fa_2x_1.genome"
 bacterialGenomeLengths2 = "/data/reference/IGC/fs/760MetaHit_139HMP_368PKU_511Bac.fa_2x_2.genome"
 
-bacterialGenomeTags = "/data/reference/IGC/IGC.annotation.summary.v2"
+# Note the bacterialGenomeTags file must contain a header!
+bacterialGenomeTags = "/data/reference/IGC/IGC.annotation.summary.v3"
 
 
 # [Script begin]
@@ -111,7 +110,7 @@ for laneFile in lanePaths:
                         "mv " + csfastaFileName + ".15.filtered.csfasta " + csfastaFileName + ".15.filtered.fixed.csfasta" + "\n" +
                         "mv none " + csfastaFileName + ".QV.15.filtered.fixed.qual" + "\n" +
                         "\n" +
-                        qualityTrimmerPath + "csfasta_quality_filter.pl -f " + csfastaFileName + ".15.filtered.fixed.csfasta -q " + csfastaFileName + ".QV.15.filtered.fixed.qual -o $ScriptDir/2_Processed_reads/" + csfastaFileName + ".15.filtered.fixed.trimmed.csfasta -l 30 -s 30 &>$ScriptDir/5_Statistics/" + csfastaFileName + "_csfasta_quality_filter.log" + "\n" +
+                        selfPath + "csfasta_quality_filter.pl -f " + csfastaFileName + ".15.filtered.fixed.csfasta -q " + csfastaFileName + ".QV.15.filtered.fixed.qual -o $ScriptDir/2_Processed_reads/" + csfastaFileName + ".15.filtered.fixed.trimmed.csfasta -l 30 -s 30 &>$ScriptDir/5_Statistics/" + csfastaFileName + "_csfasta_quality_filter.log" + "\n" +
                         "\n" +
                         "cd $ScriptDir" +
                         "\n" +
@@ -131,8 +130,8 @@ for laneFile in lanePaths:
                         "\n" +
                         "cd $ScriptDir/5_Statistics/"
                         "\n" +
-                        "python " + coverageExporterPath + "get_cov_from_bedtools_hist.py " + csfastaFileName + "_genomeCoverageBed_B1.txt " + bacterialGenomeLengths1 + " " + csfastaFileName + "_bp_coverage_B1.txt " + csfastaFileName + "_pos_coverage_B1.txt" + "\n" +
-                        "python " + coverageExporterPath + "get_cov_from_bedtools_hist.py " + csfastaFileName + "_genomeCoverageBed_B2.txt " + bacterialGenomeLengths2 + " " + csfastaFileName + "_bp_coverage_B2.txt " + csfastaFileName + "_pos_coverage_B2.txt" + "\n" +
+                        "python " + selfPath + "get_cov_from_bedtools_hist.py " + csfastaFileName + "_genomeCoverageBed_B1.txt " + bacterialGenomeLengths1 + " " + csfastaFileName + "_bp_coverage_B1.txt " + csfastaFileName + "_pos_coverage_B1.txt" + "\n" +
+                        "python " + selfPath + "get_cov_from_bedtools_hist.py " + csfastaFileName + "_genomeCoverageBed_B2.txt " + bacterialGenomeLengths2 + " " + csfastaFileName + "_bp_coverage_B2.txt " + csfastaFileName + "_pos_coverage_B2.txt" + "\n" +
                         "\n" +
                         "cat " + csfastaFileName + "_bp_coverage_B1.txt " + csfastaFileName + "_bp_coverage_B2.txt > " + csfastaFileName + "_bp_coverage_B_merged.txt" + "\n" +
                         "cat " + csfastaFileName + "_pos_coverage_B1.txt " + csfastaFileName + "_pos_coverage_B2.txt > " + csfastaFileName + "_pos_coverage_B_merged.txt" + "\n" +

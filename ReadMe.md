@@ -10,7 +10,7 @@
 
  1. Pre-configured *ThreeBeesGenerator.py* makes *ThreeBees.sh* script in the folder specified after -f flag. This folder must contain *"LXX"* subdirectories, and **.xsq* file must have path like *"LXX/result/"*;
  2. *ThreeBees.sh* runs main data processing including the next step;
- 3. *ThreeBeesCombiner.py* collects all required coverage data into *bp.txt* or *pos.txt* files created in *"ThreeBees/5_Statistics/Finalized/"* path. *"bp.txt"* contains total coverage and *"pos.txt"* contains numbers of covered nucleotides per gene (entry). 
+ 3. *ThreeBeesCombiner.py* collects all required coverage data into *bp.txt* or *pos.txt* files created in *"ThreeBees/5_Statistics/Finalized/"* path. *"bp.txt"* contains total coverage and *"pos.txt"* contains numbers of covered nucleotides per gene (entry). The example is given in *"msbA.png"*.
 
 ### Data processing
 
@@ -29,8 +29,11 @@
  - Launch commands:
 ```
 cd <full path to folder with "LXX" subdirectories>  # Navigation into main working  directory
+
 python ~/scripts/ThreeBees/ThreeBeesGenerator.py -f <full path to folder with "LXX" subdirectories>  # Bash script generation
+
 nohup bash ThreeBees.sh > /dev/null 2>&1 & echo $! > run.pid  # Launch bash script with free console and save master control process ID, killing it will stop pipeline
+
 top  # Watch the progress, press "q" to exit
 ```
 
@@ -39,18 +42,21 @@ top  # Watch the progress, press "q" to exit
  - Download human *hg19* genome in colorspace fasta from Bowtie site:
 ```
 wget ftp://ftp.ccb.jhu.edu/pub/data/bowtie_indexes/hg19_c.ebwt.zip
+
 unzip hg19_c.ebwt.zip -d hg19
 ```
     
  - Download bacterial metagenomes in fasta from IGC site:
 ```
 wget ftp://climb.genomics.cn/pub/10.5524/100001_101000/100064/1.GeneCatalogs/IGC.fa.gz
+
 gunzip IGC.fa.gz
 ```
 
  - Download bacterial metagenomes annotation from IGC site:
 ```
 ftp://climb.genomics.cn/pub/10.5524/100001_101000/100064/3.IGC.AnnotationInfo/IGC.annotation_OF.summary.gz
+
 gunzip IGC.annotation_OF.summary.gz`
 ```
 
@@ -71,6 +77,7 @@ cat header.txt IGC.annotation.summary.v2 > IGC.annotation.summary.v3
 
 ```
 FastaFileSplitter.exe 760MetaHit_139HMP_368PKU_511Bac.fa.90_95 /N:2
+
 pause
 ```
 
